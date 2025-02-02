@@ -56,14 +56,5 @@ contract CollegeManagement {
         emit CollegeStatusChanged(_collegeAddress, false);
     }
 
-    // Function to add a student to a college (only if the college is not blocked)
-    function addStudent(address _collegeAddress, address _studentAddress) public notBlocked(_collegeAddress) {
-        collegeStudents[_collegeAddress].push(_studentAddress);
-    }
-
-    // Function to get the list of students in a particular college
-    function getStudents(address _collegeAddress) public view returns (address[] memory) {
-        return collegeStudents[_collegeAddress];
-    }
 }
 
