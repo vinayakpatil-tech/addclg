@@ -1,1 +1,40 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract CollegeRegistry {
+    struct Student {
+        string name;
+        string courseName;
+        string phoneNumber;
+    }
+
+    // Mapping from college Ethereum address to student list
+    mapping(address => Student[]) private collegeStudents;
+
+    // Event to emit when a new student is added
+    event StudentAdded(address indexed collegeAddress, string name, string courseName, string phoneNumber);
+
+    // Function to add a new student
+    function addStudent(
+        address collegeAddress,
+        string memory name,
+        string memory courseName,
+        string memory phoneNumber
+    ) public {
+        Student memory newStudent = Student({
+            name: name,
+            courseName: courseName,
+            phoneNumber: phoneNumber
+        });
+
+        collegeStudents[collegeAddress].push(newStudent);
+
+        emit StudentAdded(collegeAddress, name, courseName, phoneNumber);
+    }
+
+    // Function to get all students for a specific college
+    function viewtudents(address collegeAddress) public view returns (Student[] memory) {
+        return collegeStudents[collegeAddress];
+    }
+}
 
