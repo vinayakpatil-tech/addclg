@@ -1,0 +1,46 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract CourseManagement {
+    address public admin;
+
+    struct Student {
+        string name;
+        string course;
+        string phoneNumber;
+    }
+
+    mapping(uint => Student) public students;
+    uint public studentCount;
+
+    event CourseChanged(uint studentId, string oldCourse, string newCourse);
+
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "Only admin can perform this action");
+        _;
+    }
+
+    constructor() {
+        admin = msg.sender;
+    }
+
+    function addStudent(string memory _name, string memory _course, string memory _phoneNumber) public onlyAdmin {
+        studentCount++;
+        students[studentCount] = Student(_name, _course, _phoneNumber);
+    }
+
+    function changeCourse(uint _studentId, string memory _newCourse) public onlyAdmin {
+        require(_studentId > 0 && _studentId <= studentCount, "Invalid student ID");
+        
+        string memory oldCourse = students[_studentId].course;
+        students[_studentId].course = _newCourse;
+
+        emit CourseChanged(_studentId, oldCourse, _newCourse);
+    }
+
+    function getStudent(uint _studentId) public view returns (string memory, string memory, string memory) {
+        require(_studentId > 0 && _studentId <= studentCount, "Invalid student ID");
+        Student memory s = students[_studentId];
+        return (s.name, s.course, s.phoneNumber);
+    }
+}
